@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Para Andressa 💗</title>
+<style>
+  * { box-sizing: border-box; }
+  html, body { margin:0; min-height:100%; background:#020102; color:#e99ab8; font-family:Arial, Helvetica, sans-serif; }
+  body { min-height:100vh; overflow-x:hidden; overflow-y:auto; }
+  .scene {
+    min-height:100vh; width:100%; position:relative; overflow:hidden;
+    display:flex; flex-direction:column; align-items:center; justify-content:flex-start;
+    padding: min(5vh,32px) 12px 36px;
+    background: radial-gradient(ellipse at 50% 43%, #10040b 0%, #030103 48%, #000 78%);
+  }
+  .rain { position:absolute; inset:0; overflow:hidden; pointer-events:none; opacity:.58; }
+  .rain span {
+    position:absolute; top:-100px; writing-mode:vertical-rl; text-orientation:upright;
+    color:#8e163d; font-size:clamp(10px,1.25vw,16px); letter-spacing:4px;
+    text-shadow:0 0 8px #a20b43; opacity:.55; animation:fall linear infinite;
+    white-space:nowrap;
+  }
+  @keyframes fall { from { transform:translateY(-10vh); } to { transform:translateY(120vh); } }
+  .heart-wrap { position:relative; z-index:1; width:min(94vw,920px); height:min(78vh,790px); min-height:490px; margin:0 auto 14px; }
+  .heart { position:absolute; inset:0; filter:drop-shadow(0 0 5px rgba(255,73,145,.25)); }
+  .word {
+    position:absolute; transform:translate(-50%,-50%);
+    color:#e7a0bd; font-size:clamp(11px,1.55vw,19px); font-weight:700;
+    white-space:nowrap; line-height:1; letter-spacing:.2px;
+    text-shadow:0 0 3px #ff8fbd, 0 0 8px rgba(255,70,140,.45);
+    opacity:.92; animation:heartbeat 2.8s ease-in-out infinite;
+  }
+  @keyframes heartbeat {
+    0%,100% { opacity:.83; text-shadow:0 0 3px #ff8fbd,0 0 7px #9d254f; }
+    50% { opacity:1; text-shadow:0 0 5px #ffc1d7,0 0 13px #e23d82; }
+  }
+  .center-message {
+    position:relative; z-index:2; width:min(90vw,640px); text-align:center;
+    margin-top:-22px; padding:17px 18px 20px; border:1px solid rgba(230,93,147,.25);
+    border-radius:14px; background:rgba(5,0,3,.84); box-shadow:0 0 25px rgba(180,18,75,.12);
+  }
+  .center-message .lead { font-size:clamp(17px,3.2vw,27px); line-height:1.35; font-weight:700; color:#f3abc7; text-shadow:0 0 12px #8d1645; }
+  .center-message .name { margin-top:8px; font-size:clamp(15px,2.5vw,21px); color:#d982a6; }
+  .countdown { margin-top:14px; color:#f4b0ca; font-weight:700; letter-spacing:1px; font-size:clamp(14px,2.4vw,20px); }
+  .countdown small { display:block; margin-top:5px; font-size:11px; font-weight:400; letter-spacing:2px; color:#9f5975; }
+  @media (max-width:600px) {
+    .scene { padding-top:20px; }
+    .heart-wrap { width:100vw; height:64vh; min-height:410px; margin-left:-12px; margin-right:-12px; }
+    .word { font-size:clamp(9px,2.4vw,13px); }
+    .center-message { margin-top:-8px; }
+  }
+  @media (prefers-reduced-motion: reduce) { .word,.rain span { animation:none; } }
+</style>
+</head>
+<body>
+<div class="scene">
+  <div class="rain" id="rain"></div>
+  <div class="heart-wrap"><div class="heart" id="heart"></div></div>
+  <section class="center-message">
+    <div class="lead">Falta pouco para a saudade virar uma vida lado a lado.</div>
+    <div class="name">Você é uma mulher incrível, Andressa. 💗</div>
+    <div class="countdown" id="countdown">Contando os dias…<small>ATÉ 29 DE NOVEMBRO</small></div>
+  </section>
+</div>
+<script>
+  // Repeated words are placed along a heart-shaped curve, like the reference pin.
+  const heart = document.getElementById('heart');
+  const wrap = document.querySelector('.heart-wrap');
+  function buildHeart() {
+    heart.innerHTML = '';
+    const w = wrap.clientWidth, h = wrap.clientHeight;
+    const scaleX = w * 0.43, scaleY = h * 0.43;
+    const points = [];
+    // Classic parametric heart; sample the outline densely to make the words overlap slightly.
+    for (let t=0; t<Math.PI*2; t+=0.105) {
+      const x = 16*Math.pow(Math.sin(t),3);
+      const y = 13*Math.cos(t)-5*Math.cos(2*t)-2*Math.cos(3*t)-Math.cos(4*t);
+      points.push({x:w/2 + x/32*scaleX, y:h/2 - y/32*scaleY});
+    }
+    points.forEach((p,i) => {
+      const el = document.createElement('span');
+      el.className = 'word';
+      el.textContent = 'I LOVE YOU';
+      el.style.left = p.x+'px'; el.style.top = p.y+'px';
+      el.style.animationDelay = ((i%18)*-0.11)+'s';
+      // Add slight jitter to mimic the layered, imperfect text in the pin.
+      if (i%3===0) { el.style.left=(p.x+2)+'px'; el.style.top=(p.y+1)+'px'; }
+      heart.appendChild(el);
+    });
+  }
+  const rain = document.getElementById('rain');
+  for(let i=0;i<18;i++){
+    const s=document.createElement('span');
+    s.textContent = i%2===0 ? 'LOVELOVE' : 'ILOVEYOU';
+    s.style.left=(2+Math.random()*96)+'%';
+    s.style.animationDuration=(7+Math.random()*11)+'s';
+    s.style.animationDelay=(-Math.random()*15)+'s';
+    s.style.opacity=(.18+Math.random()*.4);
+    rain.appendChild(s);
+  }
+  function updateCountdown(){
+    const now=new Date();
+    let target=new Date(now.getFullYear(),10,29,0,0,0);
+    if(now>=target) target=new Date(now.getFullYear()+1,10,29,0,0,0);
+    const ms=target-now;
+    const days=Math.floor(ms/86400000);
+    const hours=Math.floor(ms%86400000/3600000);
+    const minutes=Math.floor(ms%3600000/60000);
+    const seconds=Math.floor(ms%60000/1000);
+    document.getElementById('countdown').innerHTML =
+      `${days} dias · ${hours}h · ${minutes}min · ${seconds}s<small>ATÉ 29 DE NOVEMBRO</small>`;
+  }
+  buildHeart(); updateCountdown(); setInterval(updateCountdown,1000);
+  window.addEventListener('resize',buildHeart);
+</script>
+</body>
+</html>
